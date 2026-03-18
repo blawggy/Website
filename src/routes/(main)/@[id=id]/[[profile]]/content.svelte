@@ -184,6 +184,18 @@
 				href="{path}/ranks"
 				class="{route === 'ranks' ? 'bg-muted' : ''} w-1/3 cursor-pointer sm:w-auto">Ranks</Button
 			>
+			<Button
+				variant="ghost"
+				size="sm"
+				href="{path}/achievements"
+				class="{route === 'achievements' ? 'bg-muted' : ''} w-1/3 cursor-pointer sm:w-auto">Achievements</Button
+			>
+			<Button
+				variant="ghost"
+				size="sm"
+				href="/compare?p1={data.account?.name}"
+				class="w-1/3 cursor-pointer sm:w-auto">Compare</Button
+			>
 			{#if page.data.session?.perms.support}
 				<Button variant="ghost" size="sm" href="{path}/graphs" class="w-1/3 cursor-pointer sm:w-auto"
 					>Admin</Button

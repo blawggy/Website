@@ -10,6 +10,7 @@
 	import PetSelector from '$comp/rates/pet-selector.svelte';
 	import ToolSelector from '$comp/rates/tool-selector.svelte';
 	import Cropselector from '$comp/stats/contests/crop-selector.svelte';
+	import FortuneBadgesPanel from '$comp/stats/fortune-badges/fortune-badges-panel.svelte';
 	import type { RatesItemPriceData } from '$lib/api/elite';
 	import { PROPER_CROP_NAME, PROPER_CROP_TO_API_CROP, PROPER_CROP_TO_IMG } from '$lib/constants/crops';
 	import { DEFAULT_SKILL_CAPS } from '$lib/constants/levels';
@@ -414,6 +415,8 @@
 
 <div class="flex w-full flex-col items-center justify-center gap-4">
 	<Cropselector radio={true} />
+
+	<FortuneBadgesPanel fortune={totalFortune} />
 
 	<div class="flex w-full max-w-6xl flex-col justify-center gap-4 md:flex-row">
 		<section class="bg-card flex w-full flex-1 flex-col items-center gap-4 rounded-md border-2 p-4 md:py-4">
