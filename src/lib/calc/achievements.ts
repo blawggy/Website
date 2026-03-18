@@ -6,6 +6,20 @@ import {
 import { DEFAULT_SKILL_CAPS } from '$lib/constants/levels';
 import { getLevelProgress } from '$lib/format';
 
+// Maps CropName keys to their proper display names used in cropWeight records
+const CROP_NAME_TO_WEIGHT_KEY: Record<string, string> = {
+	cactus: 'Cactus',
+	carrot: 'Carrot',
+	cocoa: 'Cocoa Beans',
+	melon: 'Melon',
+	mushroom: 'Mushroom',
+	netherwart: 'Nether Wart',
+	potato: 'Potato',
+	pumpkin: 'Pumpkin',
+	sugarcane: 'Sugar Cane',
+	wheat: 'Wheat',
+};
+
 /**
  * Calculate which achievements a player has earned and their progress.
  */
@@ -63,10 +77,7 @@ export function getAllAchievements(member: ProfileMemberDto | undefined | null):
 				if (achievement.id.startsWith('collection_')) {
 					value = normalizedCollections[crop] ?? 0;
 				} else if (achievement.id.startsWith('weight_')) {
-					value = cropWeights[achievement.crop === 'sugarcane' ? 'Sugar Cane'
-						: achievement.crop === 'netherwart' ? 'Nether Wart'
-						: achievement.crop === 'cocoa' ? 'Cocoa Beans'
-						: (achievement.crop ?? '').charAt(0).toUpperCase() + (achievement.crop ?? '').slice(1)] ?? 0;
+					value = cropWeights[CROP_NAME_TO_WEIGHT_KEY[crop] ?? crop] ?? 0;
 				} else if (achievement.id.startsWith('contest_')) {
 					value = normalizedGoldMedals[crop] ?? 0;
 				}

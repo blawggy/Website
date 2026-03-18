@@ -13,6 +13,8 @@
 	const tier = $derived(achievement.tiers[currentTier - 1]);
 	const nextTier = $derived(achievement.tiers[currentTier] ?? null);
 	const percent = $derived(maxProgress > 0 ? (progress / maxProgress) * 100 : completed ? 100 : 0);
+	const prevTierReq = $derived(currentTier > 0 ? (achievement.tiers[currentTier - 1]?.requirement ?? 0) : 0);
+	const remainingToNext = $derived(nextTier ? nextTier.requirement - progress - prevTierReq : 0);
 
 	const borderColor = $derived(
 		completed ? (tier?.color ?? '#50c878') : currentTier > 0 ? (tier?.color ?? 'transparent') : 'transparent'
@@ -43,7 +45,7 @@
 					compact
 				/>
 			{:else}
-				<div class="bg-completed h-5 rounded-xs" style="width: 100%;">
+				<div class="bg-completed h-5 w-full rounded-xs">
 					<p class="flex h-full items-center justify-center text-xs font-semibold">Completed!</p>
 				</div>
 			{/if}
@@ -69,7 +71,7 @@
 			</div>
 			{#if nextTier && !completed}
 				<p class="text-muted-foreground mt-1 text-xs">
-					Next: <span style="color: {nextTier.color};">{nextTier.name}</span> — {(nextTier.requirement - progress - (currentTier > 0 ? achievement.tiers[currentTier - 1].requirement : 0)).toLocaleString()} more needed
+					Next: <span style="color: {nextTier.color};">{nextTier.name}</span> — {remainingToNext.toLocaleString()} more needed
 				</p>
 			{/if}
 		</div>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ProfileMemberDto } from '$lib/api';
+	import { CROPS_PER_ONE_WEIGHT } from '$lib/constants/weights';
 	import { PROPER_CROP_NAMES, PROPER_CROP_TO_IMG } from '$lib/constants/crops';
 	import StatsComparisonCard from './stats-comparison-card.svelte';
 
@@ -38,15 +39,35 @@
 		return (member?.farmingWeight?.cropWeight as Record<string, number>)?.[cropName] ?? 0;
 	}
 
-	// Only weight-tracked crops
-	const weightCrops = PROPER_CROP_NAMES.filter((n) =>
-		['Wheat', 'Carrot', 'Potato', 'Sugar Cane', 'Nether Wart', 'Pumpkin', 'Melon', 'Mushroom', 'Cocoa Beans', 'Cactus'].includes(n)
+	// Only include crops that are tracked for farming weight, derived from the weights constant
+	// Map from weight key (lowercase) to display name
+	const WEIGHT_CROP_KEY_TO_NAME: Record<string, string> = {
+		wheat: 'Wheat',
+		carrot: 'Carrot',
+		potato: 'Potato',
+		sugarcane: 'Sugar Cane',
+		netherwart: 'Nether Wart',
+		pumpkin: 'Pumpkin',
+		melon: 'Melon',
+		mushroom: 'Mushroom',
+		cocoa: 'Cocoa Beans',
+		cactus: 'Cactus',
+	};
+
+	// Only display crops that are both in weight tracking and in PROPER_CROP_NAMES
+	const weightCrops = Object.values(WEIGHT_CROP_KEY_TO_NAME).filter((name) =>
+		PROPER_CROP_NAMES.includes(name)
 	);
+
+	// Keep ordering consistent with CROPS_PER_ONE_WEIGHT
+	const sortedWeightCrops = Object.keys(CROPS_PER_ONE_WEIGHT)
+		.map((key) => WEIGHT_CROP_KEY_TO_NAME[key])
+		.filter((name): name is string => !!name && weightCrops.includes(name));
 </script>
 
 <div class="flex flex-col gap-3">
 	<h3 class="text-lg font-semibold">Crop Comparison</h3>
-	{#each weightCrops as crop (crop)}
+	{#each sortedWeightCrops as crop (crop)}
 		{@const img = PROPER_CROP_TO_IMG[crop]}
 		{@const col1 = getCropCollection(member1, crop)}
 		{@const col2 = getCropCollection(member2, crop)}

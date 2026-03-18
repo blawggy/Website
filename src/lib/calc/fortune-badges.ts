@@ -17,12 +17,12 @@ export function getOverallFortuneBadge(totalFortune: number): FortuneBadge {
  * Returns the next badge tier after the current one, or null if already at max.
  */
 export function getNextFortuneBadge(currentFortune: number): FortuneBadge | null {
-	for (let i = FORTUNE_BADGE_TIERS.length - 1; i >= 0; i--) {
-		if (currentFortune >= FORTUNE_BADGE_TIERS[i].minFortune) {
-			return FORTUNE_BADGE_TIERS[i + 1] ?? null;
+	for (const tier of FORTUNE_BADGE_TIERS) {
+		if (currentFortune < tier.minFortune) {
+			return tier;
 		}
 	}
-	return FORTUNE_BADGE_TIERS[1] ?? null;
+	return null;
 }
 
 /**
